@@ -1,0 +1,549 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RdKafka</name>
+    </assembly>
+    <members>
+        <member name="T:RdKafka.Config">
+            <summary>
+            Global configuration that is passed to
+            Consumer or Producer constructors.
+            </summary>
+        </member>
+        <member name="M:RdKafka.Config.Dump">
+            <summary>
+            Dump all configuration names and values into a dictionary.
+            </summary>
+        </member>
+        <member name="P:RdKafka.Config.Item(System.String)">
+             <summary>
+             Get or set a configuration value directly.
+            
+             See <see href="https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md">CONFIGURATION.md</see> for the full list of supported properties.
+             </summary>
+             <param name="name">The configuration property name.</param>
+             <returns>The configuration property value.</returns>
+             <exception cref="T:System.ArgumentException"><paramref name="value" /> is invalid.</exception>
+             <exception cref="T:System.InvalidOperationException">Configuration property <paramref name="name" /> does not exist.</exception>
+        </member>
+        <member name="P:RdKafka.Config.GroupId">
+             <summary>
+             Client group id string.
+            
+             All clients sharing the same group.id belong to the same group.
+             </summary>>
+        </member>
+        <member name="P:RdKafka.Config.EnableAutoCommit">
+            <summary>
+            Automatically and periodically commit offsets in the background.
+            </summary>>
+        </member>
+        <member name="P:RdKafka.Config.Logger">
+             <summary>
+             Set custom logger callback.
+            
+             By default RdKafka logs using Console.WriteLine.
+             </summary>
+        </member>
+        <member name="P:RdKafka.Config.StatisticsInterval">
+            <summary>
+            Statistics emit interval for <see cref="E:RdKafka.Handle.OnStatistics">OnStatistics</see>.
+            </summary>
+        </member>
+        <member name="P:RdKafka.Config.DefaultTopicConfig">
+            <summary>
+            Sets the default topic configuration to use for automatically
+            subscribed topics (e.g., through pattern-matched topics).
+            </summary>
+        </member>
+        <member name="T:RdKafka.Consumer">
+             <summary>
+             High-level Kafka Consumer, receives messages from a Kafka cluster.
+            
+             Requires Kafka >= 0.9.0.0.
+             </summary>
+        </member>
+        <member name="P:RdKafka.Consumer.Assignment">
+            <summary>
+            Returns the current partition assignment as set by Assign.
+            </summary>
+        </member>
+        <member name="P:RdKafka.Consumer.Subscription">
+            <summary>
+            Returns the current partition subscription as set by Subscribe.
+            </summary>
+        </member>
+        <member name="M:RdKafka.Consumer.Subscribe(System.Collections.Generic.List{System.String})">
+             <summary>
+             Update the subscription set to topics.
+            
+             Any previous subscription will be unassigned and unsubscribed first.
+            
+             The subscription set denotes the desired topics to consume and this
+             set is provided to the partition assignor (one of the elected group
+             members) for all clients which then uses the configured
+             partition.assignment.strategy to assign the subscription sets's
+             topics's partitions to the consumers, depending on their subscription.
+             </summary>
+        </member>
+        <member name="M:RdKafka.Consumer.Unsubscribe">
+            <summary>
+            Unsubscribe from the current subscription set.
+            </summary>
+        </member>
+        <member name="M:RdKafka.Consumer.Assign(System.Collections.Generic.List{RdKafka.TopicPartitionOffset})">
+             <summary>
+             Update the assignment set to \p partitions.
+            
+             The assignment set is the set of partitions actually being consumed
+             by the KafkaConsumer.
+             </summary>
+        </member>
+        <member name="M:RdKafka.Consumer.Unassign">
+            <summary>
+            Stop consumption and remove the current assignment.
+            </summary>
+        </member>
+        <member name="M:RdKafka.Consumer.Consume(System.TimeSpan)">
+             <summary>
+             Manually consume message or get error, triggers events.
+            
+             Will invoke events for OnPartitionsAssigned/Revoked,
+             OnOffsetCommit, etc. on the calling thread.
+            
+             Returns one of:
+             - proper message (ErrorCode is NO_ERROR)
+             - error event (ErrorCode is != NO_ERROR)
+             - timeout due to no message or event within timeout (null)
+             </summary>
+        </member>
+        <member name="M:RdKafka.Consumer.Commit">
+            <summary>
+            Commit offsets for the current assignment.
+            </summary>
+        </member>
+        <member name="M:RdKafka.Consumer.Commit(RdKafka.Message)">
+            <summary>
+            Commit offset for a single topic+partition based on message.
+            </summary>
+        </member>
+        <member name="M:RdKafka.Consumer.Commit(System.Collections.Generic.List{RdKafka.TopicPartitionOffset})">
+            <summary>
+            Commit explicit list of offsets.
+            </summary>
+        </member>
+        <member name="M:RdKafka.Consumer.Committed(System.Collections.Generic.List{RdKafka.TopicPartition},System.TimeSpan)">
+            <summary>
+            Retrieve committed offsets for topics+partitions.
+            </summary>
+        </member>
+        <member name="M:RdKafka.Consumer.Position(System.Collections.Generic.List{RdKafka.TopicPartition})">
+             <summary>
+             Retrieve current positions (offsets) for topics+partitions.
+            
+             The offset field of each requested partition will be set to the offset
+             of the last consumed message + 1, or RD_KAFKA_OFFSET_INVALID in case there was
+             no previous message.
+             </summary>
+        </member>
+        <member name="T:RdKafka.ErrorCode">
+            <summary>Internal errors to rdkafka are prefixed with _</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._BEGIN">
+            <summary>Begin internal error codes</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._BAD_MSG">
+            <summary>Received message is incorrect</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._BAD_COMPRESSION">
+            <summary>Bad/unknown compression</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._DESTROY">
+            <summary>Broker is going away</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._FAIL">
+            <summary>Generic failure</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._TRANSPORT">
+            <summary>Broker transport failure</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._CRIT_SYS_RESOURCE">
+            <summary>Critical system resource</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._RESOLVE">
+            <summary>Failed to resolve broker</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._MSG_TIMED_OUT">
+            <summary>Produced message timed out</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._PARTITION_EOF">
+            <summary>Reached the end of the topic+partition queue on the broker. Not really an error.</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._UNKNOWN_PARTITION">
+            <summary>Permanent: Partition does not exist in cluster.</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._FS">
+            <summary>File or filesystem error</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._UNKNOWN_TOPIC">
+            <summary>Permanent: Topic does not exist in cluster.</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._ALL_BROKERS_DOWN">
+            <summary>All broker connections are down.</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._INVALID_ARG">
+            <summary>Invalid argument, or invalid configuration</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._TIMED_OUT">
+            <summary>Operation timed out</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._QUEUE_FULL">
+            <summary>Queue is full</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._ISR_INSUFF">
+            <summary>ISR count &lt; required.acks</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._NODE_UPDATE">
+            <summary>Broker node update</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._SSL">
+            <summary>SSL error</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._WAIT_COORD">
+            <summary>Waiting for coordinator to become available.</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._UNKNOWN_GROUP">
+            <summary>Unknown client group</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._IN_PROGRESS">
+            <summary>Operation in progress</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._PREV_IN_PROGRESS">
+            <summary>Previous operation in progress, wait for it to finish.</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._EXISTING_SUBSCRIPTION">
+            <summary>This operation would interfere with an existing subscription</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._ASSIGN_PARTITIONS">
+            <summary>Assigned partitions (rebalance_cb)</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._REVOKE_PARTITIONS">
+            <summary>Revoked partitions (rebalance_cb)</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._CONFLICT">
+            <summary>Conflicting use</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._STATE">
+            <summary>Wrong state</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._UNKNOWN_PROTOCOL">
+            <summary>Unknown protocol</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._NOT_IMPLEMENTED">
+            <summary>Not implemented</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._AUTHENTICATION">
+            <summary>Authentication failure</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._NO_OFFSET">
+            <summary>No stored offset</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode._END">
+            <summary>End internal error codes</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.UNKNOWN">
+            <summary>Unknown broker error</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.NO_ERROR">
+            <summary>Success</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.OFFSET_OUT_OF_RANGE">
+            <summary>Offset out of range</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.INVALID_MSG">
+            <summary>Invalid message</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.UNKNOWN_TOPIC_OR_PART">
+            <summary>Unknown topic or partition</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.INVALID_MSG_SIZE">
+            <summary>Invalid message size</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.LEADER_NOT_AVAILABLE">
+            <summary>Leader not available</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.NOT_LEADER_FOR_PARTITION">
+            <summary>Not leader for partition</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.REQUEST_TIMED_OUT">
+            <summary>Request timed out</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.BROKER_NOT_AVAILABLE">
+            <summary>Broker not available</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.REPLICA_NOT_AVAILABLE">
+            <summary>Replica not available</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.MSG_SIZE_TOO_LARGE">
+            <summary>Message size too large</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.STALE_CTRL_EPOCH">
+            <summary>StaleControllerEpochCode</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.OFFSET_METADATA_TOO_LARGE">
+            <summary>Offset metadata string too large</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.NETWORK_EXCEPTION">
+            <summary>Broker disconnected before response received</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.GROUP_LOAD_IN_PROGRESS">
+            <summary>Group coordinator load in progress</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.GROUP_COORDINATOR_NOT_AVAILABLE">
+            <summary>Group coordinator not available</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.NOT_COORDINATOR_FOR_GROUP">
+            <summary>Not coordinator for group</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.TOPIC_EXCEPTION">
+            <summary>Invalid topic</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.RECORD_LIST_TOO_LARGE">
+            <summary>Message batch larger than configured server segment size</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.NOT_ENOUGH_REPLICAS">
+            <summary>Not enough in-sync replicas</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.NOT_ENOUGH_REPLICAS_AFTER_APPEND">
+            <summary>Message(s) written to insufficient number of in-sync replicas</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.INVALID_REQUIRED_ACKS">
+            <summary>Invalid required acks value</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.ILLEGAL_GENERATION">
+            <summary>Specified group generation id is not valid</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.INCONSISTENT_GROUP_PROTOCOL">
+            <summary>Inconsistent group protocol</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.INVALID_GROUP_ID">
+            <summary>Invalid group.id</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.UNKNOWN_MEMBER_ID">
+            <summary>Unknown member</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.INVALID_SESSION_TIMEOUT">
+            <summary>Invalid session timeout</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.REBALANCE_IN_PROGRESS">
+            <summary>Group rebalance in progress</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.INVALID_COMMIT_OFFSET_SIZE">
+            <summary>Commit offset data size is not valid</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.TOPIC_AUTHORIZATION_FAILED">
+            <summary>Topic authorization failed</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.GROUP_AUTHORIZATION_FAILED">
+            <summary>Group authorization failed</summary>
+        </member>
+        <member name="F:RdKafka.ErrorCode.CLUSTER_AUTHORIZATION_FAILED">
+            <summary>Cluster authorization failed</summary>
+        </member>
+        <member name="T:RdKafka.EventConsumer">
+             <summary>
+             Kafka Consumer that forwards received messages as events to the application.
+            
+             Thin abstraction on top of <see cref="T:RdKafka.Consumer" />.
+             </summary>
+        </member>
+        <member name="M:RdKafka.EventConsumer.Start">
+             <summary>
+             Start automatically consuming message and trigger events.
+            
+             Will invoke OnMessage, OnEndReached and OnConsumerError events.
+             </summary>
+        </member>
+        <member name="T:RdKafka.Handle">
+            <summary>
+            Shared base of <see cref="T:RdKafka.Consumer" /> and <see cref="T:RdKafka.Producer" />.
+            </summary>
+        </member>
+        <member name="P:RdKafka.Handle.Name">
+            <summary>
+            The name of the handle
+            </summary>
+        </member>
+        <member name="P:RdKafka.Handle.MemberId">
+             <summary>
+             The client's broker-assigned group member id
+            
+             Last assigned member id, or empty string if not currently
+             a group member.
+             </summary>
+        </member>
+        <member name="P:RdKafka.Handle.OutQueueLength">
+             <summary>
+             The current out queue length
+            
+             The out queue contains messages and requests waiting to be sent to,
+             or acknowledged by, the broker.
+             </summary>
+        </member>
+        <member name="M:RdKafka.Handle.Metadata(System.Boolean,RdKafka.Topic,System.Boolean,System.TimeSpan)">
+             <summary>
+             Request Metadata from broker.
+            
+             Parameters:
+               allTopics    - if true: request info about all topics in cluster,
+                              if false: only request info about locally known topics.
+               onlyForTopic - only request info about this topic
+               includeInternal - include internal topics prefixed with __
+               timeout      - maximum response time before failing.
+             </summary>
+        </member>
+        <member name="M:RdKafka.Handle.QueryWatermarkOffsets(System.String,System.Int32,System.TimeSpan)">
+            <summary>
+            Request lowest and highest offsets for a topic partition from broker.
+            </summary>
+        </member>
+        <member name="E:RdKafka.Handle.OnError">
+            <summary>
+            Fires on critical errors, e.g. connection failures or all brokers being down.
+            </summary>
+        </member>
+        <member name="T:RdKafka.Library">
+            <summary>
+            Miscellaneous APIs for the RdKafka library itself.
+            </summary>
+        </member>
+        <member name="P:RdKafka.Library.Version">
+             <summary>
+             Returns the librdkafka version as integer.
+            
+             Interpreted as hex MM.mm.rr.xx:
+              - MM = Major
+              - mm = minor
+              - rr = revision
+              - xx = pre-release id (0xff is the final release)
+            
+             E.g.: 0x000901ff = 0.9.1
+             </summary>
+        </member>
+        <member name="P:RdKafka.Library.VersionString">
+            <summary>
+            The librdkafka version as string.
+            </summary>
+        </member>
+        <member name="P:RdKafka.Library.DebugContexts">
+            <summary>
+            List of the supported debug contexts.
+            </summary>
+        </member>
+        <member name="M:RdKafka.Library.WaitDestroyed(System.TimeSpan)">
+             <summary>
+             Wait for all rdkafka objects to be destroyed.
+            
+             Returns if all kafka objects are now destroyed,
+             or throws TimeoutException if the timeout was reached.
+            
+             Since RdKafka handle deletion is an async operation the
+             WaitDestroyed() function can be used for applications where
+             a clean shutdown is required.
+             </summary>
+             <exception cref="T:System.TimeoutException">Timeout was reached before all objects were destroyed.</exception>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:RdKafka.GroupInfo.Group" -->
+        <!-- Badly formed XML comment ignored for member "P:RdKafka.GroupInfo.Error" -->
+        <!-- Badly formed XML comment ignored for member "P:RdKafka.GroupInfo.State" -->
+        <!-- Badly formed XML comment ignored for member "P:RdKafka.GroupInfo.ProtocolType" -->
+        <!-- Badly formed XML comment ignored for member "P:RdKafka.GroupInfo.Protocol" -->
+        <!-- Badly formed XML comment ignored for member "P:RdKafka.GroupInfo.Members" -->
+        <!-- Badly formed XML comment ignored for member "P:RdKafka.GroupMemberInfo.ClientId" -->
+        <!-- Badly formed XML comment ignored for member "P:RdKafka.GroupMemberInfo.ClientHost" -->
+        <!-- Badly formed XML comment ignored for member "P:RdKafka.GroupMemberInfo.MemberMetadata" -->
+        <!-- Badly formed XML comment ignored for member "P:RdKafka.GroupMemberInfo.MemberAssignment" -->
+        <member name="F:RdKafka.Offset.Beginning">
+            <summary>
+            Start consuming from beginning of kafka partition queue: oldest msg
+            </summary>
+        </member>
+        <member name="F:RdKafka.Offset.End">
+            <summary>
+            Start consuming from end of kafka partition queue: next msg
+            </summary>
+        </member>
+        <member name="F:RdKafka.Offset.Stored">
+            <summary>
+            Start consuming from offset retrieved from offset store
+            </summary>
+        </member>
+        <member name="F:RdKafka.Offset.Invalid">
+            <summary>
+            Invalid offset
+            </summary>
+        </member>
+        <member name="T:RdKafka.Producer">
+            <summary>
+            High-level, asynchronous message producer.
+            </summary>
+        </member>
+        <member name="T:RdKafka.Topic">
+            <summary>
+            Handle to a topic obtained from <see cref="T:RdKafka.Producer" />.
+            </summary>
+        </member>
+        <member name="M:RdKafka.Topic.PartitionAvailable(System.Int32)">
+             <summary>
+             Check if partition is available (has a leader broker).
+            
+             Return true if the partition is available, else false.
+            
+             This function must only be called from inside a partitioner function.
+             </summary>
+        </member>
+        <member name="T:RdKafka.TopicConfig">
+            <summary>
+            Topic-specific configuration.
+            </summary>
+        </member>
+        <member name="M:RdKafka.TopicConfig.Dump">
+            <summary>
+            Dump all configuration names and values into a dictionary.
+            </summary>
+        </member>
+        <member name="P:RdKafka.TopicConfig.Item(System.String)">
+             <summary>
+             Get or set a configuration value directly.
+            
+             See <see href="https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md">CONFIGURATION.md</see> for the full list of supported properties.
+             </summary>
+             <param name="name">The configuration property name.</param>
+             <returns>The configuration property value.</returns>
+             <exception cref="T:System.ArgumentException"><paramref name="value" /> is invalid.</exception>
+             <exception cref="T:System.InvalidOperationException">Configuration property <paramref name="name" /> does not exist.</exception>
+        </member>
+        <member name="T:RdKafka.TopicConfig.Partitioner">
+             <summary>
+             The partitioner may be called in any thread at any time,
+             it may be called multiple times for the same message/key.
+            
+             Partitioner function constraints:
+               - MUST NOT call any RdKafka methods except for 
+                 <see cref="M:RdKafka.Topic.PartitionAvailable(System.Int32)">Topic.PartitionAvailable</see>
+               - MUST NOT block or execute for prolonged periods of time.
+               - MUST return a value between 0 and partition_cnt-1, or the
+                 special <see cref="F:RdKafka.Topic.RD_KAFKA_PARTITION_UA">RD_KAFKA_PARTITION_UA</see>
+                 value if partitioning could not be performed.
+             </summary>
+        </member>
+        <member name="P:RdKafka.TopicConfig.CustomPartitioner">
+             <summary>
+             Sets a custom <see cref="T:RdKafka.TopicConfig.Partitioner">Partitioner</see>
+             delegate to control assignment of messages to partitions. 
+            
+             See <see cref="M:RdKafka.Topic.Produce(System.Byte[],System.Byte[],System.Int32)">Topic.Produce</see> for details.
+             </summary>
+        </member>
+    </members>
+</doc>

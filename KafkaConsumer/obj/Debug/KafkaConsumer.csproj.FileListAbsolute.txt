@@ -1,0 +1,13 @@
+C:\Projects\KafkaConsumer\KafkaConsumer\bin\Debug\KafkaConsumer.exe.config
+C:\Projects\KafkaConsumer\KafkaConsumer\bin\Debug\x86\librdkafka.dll
+C:\Projects\KafkaConsumer\KafkaConsumer\bin\Debug\x86\zlib.dll
+C:\Projects\KafkaConsumer\KafkaConsumer\bin\Debug\x64\librdkafka.dll
+C:\Projects\KafkaConsumer\KafkaConsumer\bin\Debug\x64\zlib.dll
+C:\Projects\KafkaConsumer\KafkaConsumer\bin\Debug\KafkaConsumer.exe
+C:\Projects\KafkaConsumer\KafkaConsumer\bin\Debug\KafkaConsumer.pdb
+C:\Projects\KafkaConsumer\KafkaConsumer\bin\Debug\RdKafka.dll
+C:\Projects\KafkaConsumer\KafkaConsumer\bin\Debug\RdKafka.xml
+C:\Projects\KafkaConsumer\KafkaConsumer\obj\Debug\KafkaConsumer.exe
+C:\Projects\KafkaConsumer\KafkaConsumer\obj\Debug\KafkaConsumer.pdb
+C:\Projects\KafkaConsumer\KafkaConsumer\obj\Debug\KafkaConsumer.csprojResolveAssemblyReference.cache
+C:\Projects\KafkaConsumer\KafkaConsumer\bin\Debug\kafka-net.dll
