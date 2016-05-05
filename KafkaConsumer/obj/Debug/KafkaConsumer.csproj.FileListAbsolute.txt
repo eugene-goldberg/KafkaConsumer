@@ -10,6 +10,5 @@ C:\Projects\KafkaConsumer\KafkaConsumer\bin\Debug\RdKafka.xml
 C:\Projects\KafkaConsumer\KafkaConsumer\obj\Debug\KafkaConsumer.exe
 C:\Projects\KafkaConsumer\KafkaConsumer\obj\Debug\KafkaConsumer.pdb
 C:\Projects\KafkaConsumer\KafkaConsumer\bin\Debug\kafka-net.dll
-C:\Projects\KafkaConsumer\KafkaConsumer\obj\Debug\KafkaConsumer.csprojResolveAssemblyReference.cache
 C:\Projects\KafkaConsumer\KafkaConsumer\bin\Debug\Newtonsoft.Json.dll
 C:\Projects\KafkaConsumer\KafkaConsumer\bin\Debug\Newtonsoft.Json.xml
