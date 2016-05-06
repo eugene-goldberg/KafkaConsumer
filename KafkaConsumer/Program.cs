@@ -18,27 +18,41 @@ namespace KafkaConsumer
 {
     class Program
     {
+
+        public class MyModel
+        {
+            public int LOCATION_ID { get; set; }
+            public string CITY { get; set; }
+        }
         static void Main(string[] args)
         {
             var options = new KafkaOptions(new Uri("http://40.86.81.216:9092"), new Uri("http://40.86.81.216:9092"));
             var router = new BrokerRouter(options);
 
             
-            var consumerOffset = new Consumer(new ConsumerOptions("topic4", router));
+            var consumerOffset = new Consumer(new ConsumerOptions("topic1", router));
 
-            var offsets = consumerOffset.GetTopicOffsetAsync("topic4").Result
-                    .Select(x => new OffsetPosition(x.PartitionId, x.Offsets.Max())).ToArray();
+            //var topic = consumerOffset.GetTopic("topic1");
+
+
+
+            //var offsets = consumerOffset.GetTopicOffsetAsync("topic1").Result
+            //        .Select(x => new OffsetPosition(x.PartitionId, x.Offsets.Max())).ToArray();
+
+            
 
             
             OffsetPosition position = new OffsetPosition();
             //in real life, we should store the last used offset in a database, retrieve it for each subsecquent restart of the consumer,
             //and update upon consumer exit, so the next time consumer starts, it will begin reading where it has left off
-            position.Offset = 207;
+            position.Offset = 10;
             //using this will force the consumer to start reading from a specific explicitly defined position
             //var consumer = new Consumer(new ConsumerOptions("topic4", router), position);
 
             //using offsets will cause the consumer to start reading only newly sent messages
-            var consumer = new Consumer(new ConsumerOptions("topic4", router),offsets);
+            var consumer = new Consumer(new ConsumerOptions("topic1", router),position);
+
+
 
             //Consume returns a blocking IEnumerable (ie: never ending stream)
             foreach (var message in consumer.Consume())
@@ -49,11 +63,25 @@ namespace KafkaConsumer
 
                 string stringValue = System.Text.Encoding.Default.GetString(message.Value);
 
-                var jsonValue = JsonConvert.DeserializeObject(stringValue);
+                var models = JsonConvert.DeserializeObject<IList<MyModel>>(stringValue);
 
-                //Debug.WriteLine(stringValue);
-                Debug.WriteLine(jsonValue);
-                Console.WriteLine(jsonValue);
+                foreach (MyModel model in models)
+                {
+                    Console.WriteLine(model.LOCATION_ID);
+                    Console.WriteLine(model.CITY);
+                    Debug.WriteLine("MODEL:");
+                    Debug.WriteLine(model.LOCATION_ID);
+                    Debug.WriteLine(model.CITY);
+                    Debug.WriteLine("MODEL END:");
+                    Debug.WriteLine("\n\n");
+                }
+
+                //var jsonValue = JsonConvert.DeserializeObject(stringValue);
+
+
+               
+                //Debug.WriteLine(jsonValue);
+                //Console.WriteLine(jsonValue);
                 Console.WriteLine("\n\n");
                 Console.WriteLine(DateTime.Now);
             }
