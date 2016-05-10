@@ -18,8 +18,20 @@ namespace KafkaConsumer
 
         public class MyModel
         {
-            public int LOCATION_ID { get; set; }
-            public string CITY { get; set; }
+            public string INCIDENTNUMBER { get; set; }
+            public string SUBMITTER { get; set; }
+            public DateTime REPORTEDDATE { get; set; }
+            public DateTime LASTRESOLVEDDATE { get; set; }
+            public string OWNERGROUP { get; set; }
+            public string COMPANY { get; set; }
+            public string CATEGORIZATIONTIER1 { get; set; }
+            public string VATEGORIZATIONTIER2 { get; set; }
+            public string CATEGORIZATIONTIER3 { get; set; }
+            public string RESOLUTIONCATEGORY { get; set; }
+            public string RESOLUTIONCATEGORYTIER2 { get; set; }
+            public string RESOLUTIONCATEGORYTIER3 { get; set; }
+            public string REPORTEDSOURCE { get; set; }
+            public string DESCRIPTION { get; set; }
         }
         static void Main(string[] args)
         {
@@ -54,9 +66,9 @@ namespace KafkaConsumer
             //Consume returns a blocking IEnumerable (ie: never ending stream)
             foreach (var message in consumer.Consume())
             {
-                Console.WriteLine("Partition: {0},  Offset:  {1} : Data:   {2}",
-                    message.Meta.PartitionId, message.Meta.Offset, System.Text.Encoding.Default.GetString(message.Value));
-                Console.WriteLine("\n");
+                //Console.WriteLine("Partition: {0},  Offset:  {1} : Data:   {2}",
+                //    message.Meta.PartitionId, message.Meta.Offset, System.Text.Encoding.Default.GetString(message.Value));
+                //Console.WriteLine("\n");
 
                 string stringValue = System.Text.Encoding.Default.GetString(message.Value);
 
@@ -64,11 +76,15 @@ namespace KafkaConsumer
 
                 foreach (MyModel model in models)
                 {
-                    Console.WriteLine(model.LOCATION_ID);
-                    Console.WriteLine(model.CITY);
+                    Console.WriteLine(model.INCIDENTNUMBER);
+                    Console.WriteLine(model.SUBMITTER);
+                    Console.WriteLine(model.REPORTEDDATE);
+                    Console.WriteLine(model.OWNERGROUP);
                     Debug.WriteLine("MODEL:");
-                    Debug.WriteLine(model.LOCATION_ID);
-                    Debug.WriteLine(model.CITY);
+                    Debug.WriteLine(model.INCIDENTNUMBER);
+                    Debug.WriteLine(model.SUBMITTER);
+                    Debug.WriteLine(model.REPORTEDDATE);
+                    Debug.WriteLine(model.OWNERGROUP);
                     Debug.WriteLine("MODEL END:");
                     Debug.WriteLine("\n\n");
                 }
